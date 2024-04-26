@@ -12,6 +12,8 @@ router.post('/', async (req, res) => {
     })
 
     if (!user || !await bcrypt.compare(req.body.password, user.passwordDigest)) {
+      console.log('body.password', req.body.password)
+      console.log ('user.passwordDigest', user.passwordDigest)
         res.status(404).json({ message: `Could not find a user with the provided username and password` })
     } else {
         const result = await jwt.encode(process.env.JWT_SECRET, { id: user.userId })
@@ -22,8 +24,10 @@ router.post('/', async (req, res) => {
 router.get('/profile', async (req, res) => {
     try {
         const [authenticationMethod, token] = req.headers.authorization.split(' ')
+        console.log('token', token)
         if (authenticationMethod == 'Bearer') {
             const result = await jwt.decode(process.env.JWT_SECRET, token)
+            console.log('results', result)
             const { id } = result.value
             let user = await User.findOne({
                 where: {

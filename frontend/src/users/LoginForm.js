@@ -23,13 +23,16 @@ function LoginForm() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(credentials)
+            
         })
+        console.log(credentials)
 
         const data = await response.json()
+        console.log('data', data)
 
         if (response.status === 200) {
             setCurrentUser(data.user)
-            localStorage.setItem('token', data.token)
+            console.log(data.token)
             history.push(`/`)
         } else {
             setErrorMessage(data.message)
